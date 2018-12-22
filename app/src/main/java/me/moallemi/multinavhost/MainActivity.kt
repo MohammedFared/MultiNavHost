@@ -7,15 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.bottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.dashboardTabContainer
-import kotlinx.android.synthetic.main.activity_main.homeTabContainer
-import kotlinx.android.synthetic.main.activity_main.notificationsTabContainer
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private var currentController: NavController? = null
-    private var tabHistory = TabHistory().apply { push(R.id.navigation_home) }
 
     private val navHomeController: NavController by lazy { findNavController(R.id.homeTab) }
     private val navDashboardController: NavController by lazy { findNavController(R.id.dashboardTab) }
@@ -37,18 +33,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-
-        outState?.putSerializable("TAB_HISTORY", tabHistory)
-    }
-
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
 
         savedInstanceState?.let {
-            tabHistory = it.getSerializable("TAB_HISTORY") as TabHistory
-            switchTab(bottomNavigationView.selectedItemId, false)
+            switchTab(bottomNavigationView.selectedItemId)
         }
     }
 
@@ -58,20 +47,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         currentController?.let {
-            if (it.popBackStack().not()) {
-                if (tabHistory.size > 1) {
-                    val tabId = tabHistory.popPrevious()
-                    switchTab(tabId, false)
-                    bottomNavigationView.menu.findItem(tabId)?.isChecked = true
-                } else {
-                    tabHistory.clear()
-                    return finish()
-                }
-            }
-        } ?: run { finish() }
+            if (it.popBackStack().not())
+                finish()
+        }
     }
 
-    private fun switchTab(tabId: Int, addToHistory: Boolean = true) {
+    override fun onSupportNavigateUp(): Boolean {
+        // Allows NavigationUI to support proper up navigation or the drawer layout
+        // drawer menu, depending on the situation
+        return currentController!!.navigateUp()
+    }
+
+    private fun switchTab(tabId: Int) {
         when (tabId) {
             R.id.navigation_home -> {
                 currentController = navHomeController
@@ -94,9 +81,6 @@ class MainActivity : AppCompatActivity() {
                 dashboardTabContainer.visibility = View.INVISIBLE
                 notificationsTabContainer.visibility = View.VISIBLE
             }
-        }
-        if (addToHistory) {
-            tabHistory.push(tabId)
         }
     }
 }
