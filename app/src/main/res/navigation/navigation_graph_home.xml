@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/pageFragment"
         android:name="me.moallemi.multinavhost.fragments.PageFragment"
-        android:label="PageFragment" >
+        android:label="PageFragment">
         <argument
             android:name="pageNumber"
             app:argType="integer" />
@@ -27,6 +27,7 @@
         android:id="@+id/notificationsFragment"
         android:name="me.moallemi.multinavhost.fragments.NotificationsFragment"
         android:label="NotificationsFragment" />
+
     <action
         android:id="@+id/action_global_pageFragment"
         app:destination="@id/pageFragment"
@@ -34,4 +35,7 @@
         app:exitAnim="@anim/nav_default_exit_anim"
         app:popEnterAnim="@anim/nav_default_pop_enter_anim"
         app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/action_reset"
+        app:popUpTo="@id/homeFragment" />
 </navigation>

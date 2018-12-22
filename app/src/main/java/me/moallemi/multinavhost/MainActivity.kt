@@ -61,25 +61,37 @@ class MainActivity : AppCompatActivity() {
     private fun switchTab(tabId: Int) {
         when (tabId) {
             R.id.navigation_home -> {
-                currentController = navHomeController
+                if (currentController != navHomeController) {
+                    currentController = navHomeController
 
-                homeTabContainer.visibility = View.VISIBLE
-                dashboardTabContainer.visibility = View.INVISIBLE
-                notificationsTabContainer.visibility = View.INVISIBLE
+                    homeTabContainer.visibility = View.VISIBLE
+                    dashboardTabContainer.visibility = View.INVISIBLE
+                    notificationsTabContainer.visibility = View.INVISIBLE
+                } else {
+                    currentController?.navigate(R.id.action_reset)
+                }
             }
             R.id.navigation_dashboard -> {
-                currentController = navDashboardController
+                if (currentController != navDashboardController) {
+                    currentController = navDashboardController
 
-                homeTabContainer.visibility = View.INVISIBLE
-                dashboardTabContainer.visibility = View.VISIBLE
-                notificationsTabContainer.visibility = View.INVISIBLE
+                    homeTabContainer.visibility = View.INVISIBLE
+                    dashboardTabContainer.visibility = View.VISIBLE
+                    notificationsTabContainer.visibility = View.INVISIBLE
+                } else {
+                    currentController?.navigate(R.id.action_reset)
+                }
             }
             R.id.navigation_notifications -> {
-                currentController = navNotificationController
+                if (currentController != navNotificationController) {
+                    currentController = navNotificationController
 
-                homeTabContainer.visibility = View.INVISIBLE
-                dashboardTabContainer.visibility = View.INVISIBLE
-                notificationsTabContainer.visibility = View.VISIBLE
+                    homeTabContainer.visibility = View.INVISIBLE
+                    dashboardTabContainer.visibility = View.INVISIBLE
+                    notificationsTabContainer.visibility = View.VISIBLE
+                } else {
+                    currentController?.navigate(R.id.action_reset)
+                }
             }
         }
     }
